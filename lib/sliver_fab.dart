@@ -22,12 +22,16 @@ class SliverFab extends StatefulWidget {
   ///     If you want [floatingActionButton] to shrink earlier, increase the value.
   final double topScalingEdge;
 
+  ///Whether or not to show the [floatingActionButton]
+  final bool visible;
+
   SliverFab(
       {@required this.slivers,
       @required this.floatingActionButton,
       this.expandedHeight = 256.0,
       this.marginRight = 16.0,
-      this.topScalingEdge = 96.0});
+      this.topScalingEdge = 96.0,
+      this.visible = true});
 
   @override
   State<StatefulWidget> createState() {
@@ -53,14 +57,19 @@ class SliverFabState extends State<SliverFab> {
 
   @override
   Widget build(BuildContext context) {
+    List<Widget> children = [
+      new CustomScrollView(
+        controller: scrollController,
+        slivers: widget.slivers,
+      ),
+    ];
+
+    if (widget.visible) {
+      children.add(_buildFab());
+    }
+
     return new Stack(
-      children: <Widget>[
-        new CustomScrollView(
-          controller: scrollController,
-          slivers: widget.slivers,
-        ),
-        _buildFab(),
-      ],
+      children: children
     );
   }
 
